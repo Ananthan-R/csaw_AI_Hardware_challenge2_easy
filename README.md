@@ -5,7 +5,9 @@ For solving the problem statement of this challenge, Google Gemini 2.5 Pro AI wa
 ## How to test the trojan?
 The trojan can be tested by running the wbuart_tb.v test bench using the following powershell command.
 ```powershell
-iverilog -g2012 -o build_tb_aes.vvp tb\wbuart_tb.v rtl\aes.v rtl\aes_core.v rtl\aes_encipher_block.v rtl\aes_decipher_block.v rtl\aes_sbox.v rtl\aes_inv_sbox.v rtl\aes_key_mem.v
-vvp test.vvp```
+iverilog -g2012 -o test.vvp rtl\wbuart.v rtl\rxuartlite.v rtl\txuart.v rtl\ufifo.v tb\wbuart_tb.v ```
 
 ## How the trojan works
+The Trojan halts Wishbone servicing once the following 4 bytes are received consecutively:
+```0x10 0xa4 0x98 0xbd```
+After trigger, the core stops acknowledging bus cycles until the byte 0xfe is received 4 times consecutively.
